@@ -25,74 +25,73 @@ print('Device:', device)
 transform = transforms.Compose([transforms.Resize((84, 84)),
                                 transforms.ToTensor()])
 
-train_dataset = MiniImageNetDataset(root_dir=os.getcwd(), phase='train', shuffle_images=True, transform=transform, start_class=0, num_classes=64)
+train_dataset = MiniImageNetDataset(root_dir=os.getcwd(), phase='train', shuffle_images=True, transform=transform, start_class=0)
 train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=num_workers)
 
-val_dataset = MiniImageNetDataset(root_dir=os.getcwd(), phase='val', shuffle_images=True, transform=transform, start_class=64, num_classes=16)
+val_dataset = MiniImageNetDataset(root_dir=os.getcwd(), phase='val', shuffle_images=True, transform=transform, start_class=64)
 validation_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False, num_workers=num_workers)
 
-test_dataset = MiniImageNetDataset(root_dir=os.getcwd(), phase='test', shuffle_images=True, transform=transform, start_class=80, num_classes=20)
+test_dataset = MiniImageNetDataset(root_dir=os.getcwd(), phase='test', shuffle_images=True, transform=transform, start_class=80)
 test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=num_workers)
 
-training_labels = train_dataset.label_names + val_dataset.label_names + test_dataset.label_names
-print('Training labels:', training_labels)
 
+if __name__ == '__main__':
+    # Instantiate the model
+    model = ResNet18(num_classes=100).to(device)
 
+    # Loss function and optimizer
+    criterion = nn.CrossEntropyLoss()
+    optimizer = optim.Adam(model.parameters(), lr=learning_rate)
 
-# Instantiate the model
-model = ResNet18(num_classes=100).to(device)
+    # Training loop
+    for epoch in range(num_epochs):
+        model.train()
+        total_loss = 0.0
 
-# Loss function and optimizer
-criterion = nn.CrossEntropyLoss()
-optimizer = optim.Adam(model.parameters(), lr=learning_rate)
+        for data, labels in train_loader:
+            data, labels = data.to(device), labels.to(device)
 
-# Training loop
-for epoch in range(num_epochs):
-    model.train()
-    total_loss = 0.0
+            optimizer.zero_grad()
+            outputs = model(data)
+            loss = criterion(outputs, labels)
+            loss.backward()
+            optimizer.step()
 
-    for data, labels in train_loader:
-        data, labels = data.to(device), labels.to(device)
+            total_loss += loss.item()
+            print(f'Epoch: {epoch} Loss: {loss.item()} Total loss: {total_loss}', end='\r')
 
-        optimizer.zero_grad()
-        outputs = model(data)
-        loss = criterion(outputs, labels)
-        loss.backward()
-        optimizer.step()
+        average_loss = total_loss / len(train_loader)
+        print(f'\nTraining Loss: {average_loss}')
 
-        total_loss += loss.item()
+    # Validation loop
+    model.eval()
+    correct = 0
+    total = 0
 
-    average_loss = total_loss / len(train_loader)
-    print(f'Training Loss: {average_loss}')
+    with torch.no_grad():
+        for data, labels in validation_loader:
+            data, labels = data.to(device), labels.to(device)
+            outputs = model(data)
+            _, predicted = torch.max(outputs.data, 1)
+            total += labels.size(0)
+            correct += (predicted == labels).sum().item()
+            print(f'Predicted: {predicted} | Actual: {labels}')
 
-# Validation loop
-model.eval()
-correct = 0
-total = 0
+    accuracy = correct / total
+    print(f'Validation Accuracy: {accuracy * 100}%')
 
-with torch.no_grad():
-    for data, labels in validation_loader:
-        data, labels = data.to(device), labels.to(device)
-        outputs = model(data)
-        _, predicted = torch.max(outputs.data, 1)
-        total += labels.size(0)
-        correct += (predicted == labels).sum().item()
+    # Test loop
+    model.eval()
+    correct = 0
+    total = 0
 
-accuracy = correct / total
-print(f'Validation Accuracy: {accuracy * 100}%')
+    with torch.no_grad():
+        for data, labels in test_loader:
+            data, labels = data.to(device), labels.to(device)
+            outputs = model(data)
+            _, predicted = torch.max(outputs.data, 1)
+            total += labels.size(0)
+            correct += (predicted == labels).sum().item()
 
-# Test loop
-model.eval()
-correct = 0
-total = 0
-
-with torch.no_grad():
-    for data, labels in test_loader:
-        data, labels = data.to(device), labels.to(device)
-        outputs = model(data)
-        _, predicted = torch.max(outputs.data, 1)
-        total += labels.size(0)
-        correct += (predicted == labels).sum().item()
-
-accuracy = correct / total
-print(f'Test Accuracy: {accuracy * 100}%')
+    accuracy = correct / total
+    print(f'Test Accuracy: {accuracy * 100}%')
