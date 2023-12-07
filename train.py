@@ -7,6 +7,7 @@ from torch.utils.data import DataLoader
 from torchvision import transforms
 
 from mini_imagenet_dataset import MiniImageNetDataset
+from tools import getDataset
 
 from models.resnet18 import ResNet18
 
@@ -21,16 +22,19 @@ if torch.backends.mps.is_available():
 else:
     print("MPS device not found.")
 
+root_dir = os.path.join(os.getcwd(), 'datasets/miniImageNet')
+dataset, label_mapping = getDataset(root_dir, shuffle_images=False)
+
 transform = transforms.Compose([transforms.Resize((84, 84)),
                                 transforms.ToTensor()])
 
-train_dataset = MiniImageNetDataset(root_dir=os.getcwd(), phase='train', shuffle_images=True, transform=transform, start_class=0)
+train_dataset = MiniImageNetDataset(dataset=dataset, path=root_dir, phase='train', shuffle_images=True, transform=transform)
 train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=num_workers)
 
-val_dataset = MiniImageNetDataset(root_dir=os.getcwd(), phase='val', shuffle_images=True, transform=transform, start_class=64)
+val_dataset = MiniImageNetDataset(dataset=dataset, path=root_dir, phase='val', shuffle_images=True, transform=transform)
 validation_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False, num_workers=num_workers)
 
-test_dataset = MiniImageNetDataset(root_dir=os.getcwd(), phase='test', shuffle_images=True, transform=transform, start_class=80)
+test_dataset = MiniImageNetDataset(dataset=dataset, path=root_dir, phase='test', shuffle_images=True, transform=transform)
 test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=num_workers)
 
 
