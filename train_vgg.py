@@ -5,19 +5,18 @@ import torch.nn as nn
 import torch.optim as optim
 from torch.optim.lr_scheduler import StepLR
 from torch.utils.data import DataLoader
-from torchvision import transforms
+from torchvision import transforms, models
 
 import matplotlib.pyplot as plt
 
 from mini_imagenet_dataset import MiniImageNetDataset
 from tools import getDataset, print_class_distribution
 
-from models.resnet18 import ResNet18
 
 batch_size = 64
 num_workers = 4
-learning_rate = 0.01
-num_epochs = 10
+learning_rate = 0.001
+num_epochs = 20
 
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 if torch.backends.mps.is_available():
@@ -28,21 +27,30 @@ else:
 root_dir = os.path.join(os.getcwd(), 'datasets/miniImageNet')
 dataset, label_mapping = getDataset(root_dir, shuffle_images=True)
 
-transform = transforms.Compose([
-    transforms.Resize((84, 84)),
-    transforms.RandomHorizontalFlip(),
-    transforms.RandomRotation(10),
-    transforms.ColorJitter(brightness=0.1, contrast=0.1, saturation=0.1, hue=0.1),
-    transforms.ToTensor(),
-])
+train_transforms = transforms.Compose(
+    [
+        transforms.Resize((224, 224)),
+        transforms.ColorJitter(brightness=0.1, contrast=0.1, saturation=0.1, hue=0.1),
+        transforms.RandomHorizontalFlip(),
+        transforms.ToTensor(),
+        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+    ]
+)
 
-train_dataset = MiniImageNetDataset(dataset=dataset, path=root_dir, phase='train', shuffle_images=True, transform=transform)
+transforms = transforms.Compose(
+    [
+        transforms.Resize((224, 224)),
+        transforms.ToTensor(),
+    ]
+)
+
+train_dataset = MiniImageNetDataset(dataset=dataset, path=root_dir, phase='train', shuffle_images=True, transform=train_transforms)
 train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=num_workers)
 
-val_dataset = MiniImageNetDataset(dataset=dataset, path=root_dir, phase='val', shuffle_images=True, transform=transform)
+val_dataset = MiniImageNetDataset(dataset=dataset, path=root_dir, phase='val', shuffle_images=True, transform=transforms)
 validation_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False, num_workers=num_workers)
 
-test_dataset = MiniImageNetDataset(dataset=dataset, path=root_dir, phase='test', shuffle_images=True, transform=transform)
+test_dataset = MiniImageNetDataset(dataset=dataset, path=root_dir, phase='test', shuffle_images=True, transform=transforms)
 test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=num_workers)
 
 
@@ -72,7 +80,8 @@ def eval(net, data_loader, criterion=nn.CrossEntropyLoss()):
 def train(net, train_loader, valid_loader):
 
     criterion = nn.CrossEntropyLoss()
-    optimizer = optim.Adam(params=model.parameters(), lr=learning_rate, weight_decay=0.0001)
+    # optimizer = optim.Adam(params=model.parameters(), lr=learning_rate, weight_decay=0.0001)
+    optimizer = optim.SGD(params=net.parameters(), lr=0.01, momentum=0.9, weight_decay=0.0001)
     scheduler = StepLR(optimizer, step_size=5, gamma=0.1)
 
     use_cuda = torch.cuda.is_available()
@@ -127,7 +136,7 @@ if __name__ == '__main__':
     # print_class_distribution(val_dataset, "Validation", label_mapping)
     # print_class_distribution(test_dataset, "Testing", label_mapping)
 
-    model = ResNet18(num_classes=100).to(device)
+    model = models.vgg11(weights=None, num_classes=100).to(device)
     model, training_losses, val_losses = train(net=model, train_loader=train_loader, valid_loader=validation_loader)
 
     acc_test, test_loss = eval(model, test_loader)
@@ -140,4 +149,4 @@ if __name__ == '__main__':
     plt.legend()
     plt.show()
 
-    torch.save(model, os.path.join(os.getcwd(), 'pretrained/resnet18_model_full_2.pth'))
+    torch.save(model, os.path.join(os.getcwd(), 'pretrained/vgg_model_full_2.pth'))
