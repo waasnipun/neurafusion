@@ -13,7 +13,7 @@ from models.resnet18 import ResNet18
 batch_size = 64
 num_workers = 4
 learning_rate = 0.001
-num_epochs = 5
+num_epochs = 2
 
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 if torch.backends.mps.is_available():
