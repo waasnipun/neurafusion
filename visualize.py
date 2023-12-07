@@ -13,7 +13,6 @@ val_dataset = MiniImageNetDataset(dataset=dataset, path=root_dir, phase='val', s
 test_dataset = MiniImageNetDataset(dataset=dataset, path=root_dir, phase='test', shuffle_images=True, transform=None)
 
 idx = np.random.choice(range(len(train_dataset)), 5, replace=False) # randomly pick 5 pictures to show
-
 fig = plt.figure(figsize=(16, 8))
 
 for i in range(len(idx)):
@@ -22,6 +21,7 @@ for i in range(len(idx)):
     plt.tight_layout()
     ax.set_title('class #{}'.format(label_mapping[label]))
     ax.axis('off')
+    plt.xlabel('training dataset')
     plt.imshow(np.asarray(image))
 
 plt.show()
@@ -30,3 +30,44 @@ plt.show()
 print('total number of training set: {}'.format(len(train_dataset)))
 for i in label_mapping.keys():
     print('numer of images for class {}: {}'.format(label_mapping[i], len([label for _, label in train_dataset.data if label == i])))
+
+
+idx = np.random.choice(range(len(val_dataset)), 5, replace=False) # randomly pick 5 pictures to show
+fig = plt.figure(figsize=(16, 8))
+
+for i in range(len(idx)):
+    image, label = val_dataset[idx[i]]
+    ax = plt.subplot(1, 5, i + 1)
+    plt.tight_layout()
+    ax.set_title('class #{}'.format(label_mapping[label]))
+    ax.axis('off')
+    plt.xlabel('training dataset')
+    plt.imshow(np.asarray(image))
+
+plt.show()
+
+# print number of images for each class
+print('total number of testing set: {}'.format(len(val_dataset)))
+for i in label_mapping.keys():
+    print('numer of images for class {}: {}'.format(label_mapping[i], len([label for _, label in val_dataset.data if label == i])))
+
+idx = np.random.choice(range(len(test_dataset)), 5, replace=False)  # randomly pick 5 pictures to show
+fig = plt.figure(figsize=(16, 8))
+
+for i in range(len(idx)):
+    image, label = test_dataset[idx[i]]
+    ax = plt.subplot(1, 5, i + 1)
+    plt.tight_layout()
+    ax.set_title('class #{}'.format(label_mapping[label]))
+    ax.axis('off')
+    plt.xlabel('training dataset')
+    plt.imshow(np.asarray(image))
+
+plt.show()
+
+# print number of images for each class
+print('total number of testing set: {}'.format(len(test_dataset)))
+for i in label_mapping.keys():
+    print('numer of images for class {}: {}'.format(label_mapping[i],
+                                                    len([label for _, label in test_dataset.data if label == i])))
+
