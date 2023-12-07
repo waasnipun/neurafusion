@@ -7,6 +7,8 @@ from torch.optim.lr_scheduler import StepLR
 from torch.utils.data import DataLoader
 from torchvision import transforms
 
+import matplotlib.pyplot as plt
+
 from mini_imagenet_dataset import MiniImageNetDataset
 from tools import getDataset, print_class_distribution
 
@@ -15,7 +17,7 @@ from models.resnet18 import ResNet18
 batch_size = 64
 num_workers = 4
 learning_rate = 0.001
-num_epochs = 2
+num_epochs = 20
 
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 if torch.backends.mps.is_available():
@@ -47,7 +49,6 @@ def eval(net, data_loader):
     net.eval()
     correct = 0.0
     num_images = 0.0
-    print('\ntesting/evaluating')
     for i_batch, (images, labels) in enumerate(data_loader):
         images, labels = images.to(device), labels.to(device)
         outs = net(images)
@@ -69,6 +70,8 @@ def train(net, train_loader, valid_loader):
     use_cuda = torch.cuda.is_available()
     if use_cuda:
         net = net.cuda()
+
+    training_losses = []
 
     for epoch in range(num_epochs):
         net.train()
@@ -92,14 +95,16 @@ def train(net, train_loader, valid_loader):
 
             print('training -> epoch: %d, batch: %d, loss: %f' % (epoch, i_batch, loss.item()) + '\r', end='')
 
+        print()
         acc = correct / num_images
         acc_eval = eval(net, valid_loader)
         average_loss = total_loss / len(train_loader)
-        print('epoch: %d, lr: %f, accuracy: %f, loss: %f, valid accuracy: %f\n' % (epoch, optimizer.param_groups[0]['lr'], acc, average_loss, acc_eval))
+        training_losses.append(average_loss)
+        print('\nepoch: %d, lr: %f, accuracy: %f, loss: %f, valid accuracy: %f\n' % (epoch, optimizer.param_groups[0]['lr'], acc, average_loss, acc_eval))
 
         scheduler.step()
 
-    return net
+    return net, training_losses
 
 if __name__ == '__main__':
     # Print hyperparameters summary
@@ -108,18 +113,21 @@ if __name__ == '__main__':
     print(f"Learning Rate: {learning_rate}")
     print(f"Number of Epochs: {num_epochs}")
     print(f"Number of Workers: {num_workers}\n")
+
     # print_class_distribution(train_dataset, "Training", label_mapping)
     # print_class_distribution(val_dataset, "Validation", label_mapping)
     # print_class_distribution(test_dataset, "Testing", label_mapping)
 
-
-    # Instantiate the model
     model = ResNet18(num_classes=100).to(device)
-
-    model = train(net=model, train_loader=train_loader, valid_loader=validation_loader)
+    model, training_losses = train(net=model, train_loader=train_loader, valid_loader=validation_loader)
 
     acc_test = eval(model, test_loader)
+    print('\naccuracy on testing data: %f' % acc_test)
 
-    print('accuracy on testing data: %f' % acc_test)
+    plt.plot(training_losses, label='Training Loss')
+    plt.xlabel('Epoch')
+    plt.ylabel('Loss')
+    plt.legend()
+    plt.show()
 
     torch.save(model, os.path.join(os.getcwd(), 'pretrained/resnet18_model_full.pth'))
