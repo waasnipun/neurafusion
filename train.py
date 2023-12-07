@@ -13,14 +13,13 @@ from models.resnet18 import ResNet18
 batch_size = 64
 num_workers = 4
 learning_rate = 0.001
-num_epochs = 10
+num_epochs = 5
 
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 if torch.backends.mps.is_available():
     device = torch.device("mps")
 else:
     print("MPS device not found.")
-print('Device:', device)
 
 transform = transforms.Compose([transforms.Resize((84, 84)),
                                 transforms.ToTensor()])
@@ -47,6 +46,8 @@ if __name__ == '__main__':
     for epoch in range(num_epochs):
         model.train()
         total_loss = 0.0
+        correct = 0.0
+        num_images = 0
 
         for data, labels in train_loader:
             data, labels = data.to(device), labels.to(device)
@@ -58,10 +59,16 @@ if __name__ == '__main__':
             optimizer.step()
 
             total_loss += loss.item()
-            print(f'Epoch: {epoch} Loss: {loss.item()} Total loss: {total_loss}', end='\r')
+            print(f'Epoch: {epoch} Loss: {loss.item()}', end='\r')
 
+            predicts = outputs.argmax(dim=1)
+            correct += predicts.eq(labels).sum().item()
+            num_images += len(labels)
+
+        acc = correct / num_images
         average_loss = total_loss / len(train_loader)
-        print(f'\nTraining Loss: {average_loss}')
+        print('epoch: %d, lr: %f, accuracy: %f, average loss: %f, valid accuracy: %f' % (epoch, optimizer.param_groups[0]['lr'], acc, average_loss, 0.0))
+
 
     # Validation loop
     model.eval()
