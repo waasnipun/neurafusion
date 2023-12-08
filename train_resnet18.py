@@ -34,7 +34,7 @@ train_transforms = transforms.Compose(
         transforms.ColorJitter(brightness=0.1, contrast=0.1, saturation=0.1, hue=0.1),
         transforms.RandomHorizontalFlip(),
         transforms.ToTensor(),
-        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+        # transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
     ]
 )
 
@@ -83,7 +83,7 @@ def train(net, train_loader, valid_loader):
     criterion = nn.CrossEntropyLoss()
     # optimizer = optim.Adam(params=model.parameters(), lr=learning_rate, weight_decay=0.0001)
     optimizer = torch.optim.SGD(params=net.parameters(), lr=0.01, momentum=0.9, weight_decay=0.0001)
-    scheduler = StepLR(optimizer, step_size=5, gamma=0.1)
+    # scheduler = StepLR(optimizer, step_size=5, gamma=0.1)
 
     use_cuda = torch.cuda.is_available()
     if use_cuda:
@@ -121,7 +121,7 @@ def train(net, train_loader, valid_loader):
         val_losses.append(val_loss)
         print('\nepoch: %d, lr: %f, accuracy: %f, loss: %f, valid accuracy: %f\n' % (epoch, optimizer.param_groups[0]['lr'], acc, average_loss, acc_eval))
 
-        scheduler.step()
+        # scheduler.step()
 
     return net, training_losses, val_losses
 
