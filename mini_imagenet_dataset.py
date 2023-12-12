@@ -11,11 +11,11 @@ class MiniImageNetDataset(Dataset):
         self.root_dir = path
 
         if phase == 'train':
-            self.data = dataset[:int(len(dataset)*0.6)]
+            self.data = dataset[:int(len(dataset)*0.7)]
         elif phase == 'val':
-            self.data = dataset[int(len(dataset)*0.6):int(len(dataset)*0.8)]
+            self.data = dataset[int(len(dataset)*0.7):int(len(dataset)*0.85)]
         elif phase == 'test':
-            self.data = dataset[int(len(dataset)*0.8):]
+            self.data = dataset[int(len(dataset)*0.85):]
 
     def __len__(self):
         return len(self.data)

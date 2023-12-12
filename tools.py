@@ -1,15 +1,24 @@
 import os
 import random
-def getDataset(path: str, shuffle_images=False) -> tuple:
+
+def getDataset(path: str, num_classes: int, shuffle_images=True, num_images_per_class = None) -> tuple:
     images_and_labels = []
     class_mapping = {}
     label_counter = 0
-    for class_folder in os.listdir(path):
+    if num_classes > len(os.listdir(path)):
+        raise ValueError(f"num_classes ({num_classes}) cannot be greater than the number of classes in the dataset ({len(os.listdir(path))})")
+    for class_folder in os.listdir(path)[:num_classes]:
         class_path = os.path.join(path, class_folder)
         if os.path.isdir(class_path):
             class_mapping[label_counter] = class_folder
+            images = os.listdir(class_path)
+            if num_images_per_class is not None:
+                num_images_per_class = int(num_images_per_class)
+                if num_images_per_class > len(images):
+                    raise ValueError(f"num_images_per_class ({num_images_per_class}) cannot be greater than the number of images in the class ({len(images)})")
+                images = images[:num_images_per_class]
             label_images = [(os.path.join(class_folder, image), label_counter)
-                            for image in os.listdir(class_path)]
+                            for image in images]
             images_and_labels.extend(label_images)
             label_counter += 1
 
