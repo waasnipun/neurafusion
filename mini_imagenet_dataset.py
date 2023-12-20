@@ -9,13 +9,13 @@ class MiniImageNetDataset(Dataset):
         self.shuffle_images = shuffle_images
         self.transform = transform
         self.root_dir = path
-
-        if phase == 'train':
-            self.data = dataset[:int(len(dataset)*0.7)]
-        elif phase == 'val':
-            self.data = dataset[int(len(dataset)*0.7):int(len(dataset)*0.85)]
-        elif phase == 'test':
-            self.data = dataset[int(len(dataset)*0.85):]
+        self.data = dataset
+        # if phase == 'train':
+        #     self.data = dataset[:int(len(dataset)*0.7)]
+        # elif phase == 'val':
+        #     self.data = dataset[int(len(dataset)*0.7):int(len(dataset)*0.85)]
+        # elif phase == 'test':
+        #     self.data = dataset[int(len(dataset)*0.85):]
 
     def __len__(self):
         return len(self.data)

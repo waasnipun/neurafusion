@@ -6,7 +6,7 @@ from torchvision.models import vgg, vgg16
 class VGG(nn.Module):
     def __init__(self, num_classes):
         super(VGG, self).__init__()
-        self.vgg = vgg16(pretrained=False)  # You can choose a different variant (e.g., vgg16, vgg19)
+        self.vgg = vgg16()  # You can choose a different variant (e.g., vgg16, vgg19)
 
         # Check the last layer of the classifier
         if isinstance(self.vgg.classifier[6], nn.Linear):
