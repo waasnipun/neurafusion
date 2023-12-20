@@ -1,5 +1,5 @@
 import os
-from mini_imagenet_dataset import MiniImageNetDataset
+from dataset import MiniImageNetDataset
 from tools import getDataset
 import numpy as np
 import matplotlib.pyplot as plt
@@ -29,10 +29,4 @@ def visualize(phase, dataset):
                                                         len([label for _, label in dataset.data if label == i])))
 
 
-train_dataset = MiniImageNetDataset(dataset=dataset, path=root_dir, phase='train', shuffle_images=True, transform=None)
-val_dataset = MiniImageNetDataset(dataset=dataset, path=root_dir, phase='val', shuffle_images=True, transform=None)
-test_dataset = MiniImageNetDataset(dataset=dataset, path=root_dir, phase='test', shuffle_images=True, transform=None)
 
-visualize('train', train_dataset)
-visualize('val', val_dataset)
-visualize('test', test_dataset)

@@ -9,7 +9,7 @@ from torchvision import transforms
 
 import matplotlib.pyplot as plt
 
-from mini_imagenet_dataset import MiniImageNetDataset
+from dataset import MiniImageNetDataset
 from tools import getDataset, print_class_distribution
 
 from models.ViT import ViT

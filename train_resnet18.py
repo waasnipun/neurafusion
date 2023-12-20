@@ -9,7 +9,7 @@ from torchvision import transforms, models
 
 import matplotlib.pyplot as plt
 
-from mini_imagenet_dataset import MiniImageNetDataset
+from dataset import MiniImageNetDataset
 from tools import getDataset, print_class_distribution
 
 from models.resnet18 import ResNet18
