@@ -64,7 +64,7 @@ def print_class_distribution(dataset, phase, label_mapping, num_examples=5, char
             print()  # Move to the next line
             current_line_chars = 0
 
-        print(f"{class_info} | ", end='')
+        print(f"{class_info} | ",  end="")
         current_line_chars += len(class_info) + 3  # 3 accounts for " | "
 
     print("\n")  # Ensure the last line ends with a newline

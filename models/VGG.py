@@ -2,11 +2,11 @@ import torch.nn as nn
 from torchvision.models import vgg, vgg16
 
 
-# Define ResNet10 model
+# Define VGG model
 class VGG(nn.Module):
     def __init__(self, num_classes):
         super(VGG, self).__init__()
-        self.vgg = vgg16()  # You can choose a different variant (e.g., vgg16, vgg19)
+        self.vgg = vgg16(pretrained=True)  # You can choose a different variant (e.g., vgg16, vgg19)
 
         # Check the last layer of the classifier
         if isinstance(self.vgg.classifier[6], nn.Linear):
