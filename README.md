@@ -3,12 +3,11 @@
 1. [Introduction](#introduction)
 2. [Getting Started](#getting-started)
     - [Installation](#installation)
+    - [Usage](#usage)
+        - [Pre-training](#pre-training)
+        - [Fine-tuning](#fine-tuning)
+        - [Visualization](#visualization)
     - [Directory Structure](#directory-structure)
-3. [Usage](#usage)
-    - [Pre-training](#pre-training)
-    - [Fine-tuning](#fine-tuning)
-    - [Visualization](#visualization)
-4. [Acknowledgments](#acknowledgments)
 
 ## Introduction
 
