@@ -1,4 +1,3 @@
-import torch
 from timm import create_model
 from torch import nn
 
