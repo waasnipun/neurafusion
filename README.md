@@ -11,7 +11,7 @@
 
 ## Introduction
 
-Neurafusion is a deep learning project focused on image classification using various pre-trained models such as Vision Transformers (ViT), EfficientNet, and ResNet18. The project includes tools for pre-training and fine-tuning models on different datasets, specifically MiniImageNet and EuroSAT_RGB.
+Neurafusion is a cross-domain few-shot learning project perform using various pre-trained models such as Vision Transformers (ViT), EfficientNet, and ResNet18. The project includes tools for pre-training and fine-tuning models on different datasets, specifically MiniImageNet and EuroSAT_RGB.
 
 ## Getting Started
 
