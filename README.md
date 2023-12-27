@@ -8,6 +8,7 @@
         - [Fine-tuning](#fine-tuning)
         - [Visualization](#visualization)
     - [Directory Structure](#directory-structure)
+3. [Results](#results)
 
 ## Introduction
 
@@ -98,3 +99,9 @@ Follow these steps to get started with the project:
 ├── visualize_pretrain.ipynb - Jupyter notebooks for visualizing pre-training dataset.
 └── visualize_train.ipynb - Jupyter notebooks for visualizing fine-tuning dataset.
 ```
+
+### Results
+
+ViT results on evaluating against euroSAT dataset
+
+![Image](/images/vit_euroset.png)
