@@ -53,8 +53,8 @@ Follow these steps to get started with the project:
 ### Directory Structure
 
 ```
-├── datasets
-│   ├── miniImageNet - Contains the MiniImageNet and EuroSAT_RGB datasets.
+├── datasets 
+│   ├── miniImageNet 
 │   │   ├── n01532829
 │   │   .
 │   │   .
@@ -85,10 +85,10 @@ Follow these steps to get started with the project:
 │
 ├── requirement.txt
 ├── tools.py
-├── train-ViT copy.ipynb
-├── train-ViT.ipynb
-├── train-efficientnet.ipynb
-├── train-resnet18.ipynb
+│
+├── train-ViT.ipynb - Jupyter notebooks for fine-tuning Vision Transformer model.
+├── train-efficientnet.ipynb - Jupyter notebooks for fine-tuning Efficientnet model.
+├── train-resnet18.ipynb - Jupyter notebooks for fine-tuning Resnet18 model.
 │
 ├── trained - Fine-tuned weights after training.
 │   ├── efficientnet_trained_60.13.pth
