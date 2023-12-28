@@ -31,7 +31,7 @@ Follow these steps to get started with the project:
     Sklearn
    ```
 
-2. Copy the MiniImageNet dataset and EuroSat dataset to dataset directory in root. Directory structure should look like this
+2. Copy the MiniImageNet dataset and EuroSat dataset to datasets directory to the root directory. Directory structure should look like this
 
 ```
 ├── datasets 
@@ -80,17 +80,19 @@ Follow these steps to get started with the project:
 └── visualize_train.ipynb 
 ```
 
+**Note:** Extract the class folders from `train.tar`, `val.tar` and `test.tar` into a single miniImageNet datasets folder like above so that it contains 100 folders representing 100 classes. The filepaths are setted up for the datasets folder already.
+
 ### Usage
 
 1. **Pre-training:**
-    - Open the relevant pretrain notebook (e.g., `pretrain-ViT.ipynb`).
+    - Open the ViT pretrain notebook (e.g., `pretrain-ViT.ipynb`).
     - Run the notebook to pre-train the selected model on the MiniImageNet dataset.
 
 2. **Fine-tuning:**
-    - Open the relevant train notebook (e.g., `train-ViT.ipynb`).
+    - Open the ViT train notebook (e.g., `train-ViT.ipynb`).
     - Run the notebook to fine-tune a pre-trained model on a EuroSAT dataset.
 
-3. **Visualization:**
+3. **(Optional)Visualization of the datasetsets:**
     - Explore the visualization notebooks (`visualize_EuroSAT.ipynb` and `visualize_miniImageNet.ipynb`) to understand the training and pre-training processes and distributions.
 
 
