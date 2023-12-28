@@ -2,32 +2,24 @@
 
 1. [Introduction](#introduction)
 2. [Getting Started](#getting-started)
-    - [Installation](#installation)
+    - [How to setup](#how-to-setup)
     - [Usage](#usage)
         - [Pre-training](#pre-training)
         - [Fine-tuning](#fine-tuning)
         - [Visualization](#visualization)
-    - [Directory Structure](#directory-structure)
 3. [Results](#results)
 
 ## Introduction
 
-Neurafusion is a cross-domain few-shot learning project perform using various pre-trained models such as Vision Transformers (ViT), EfficientNet, and ResNet18. The project includes tools for pre-training and fine-tuning models on different datasets, specifically MiniImageNet and EuroSAT_RGB.
+Neurafusion is a cross-domain few-shot learning project perform using various pre-trained models such as Vision Transformers (ViT), EfficientNet, and ResNet18. The main model that primary emphasis is on Vision Transformer(ViT). The project includes tools for pre-training and fine-tuning models on different datasets, specifically MiniImageNet and EuroSAT_RGB. Please follow the below instructions to get started
 
 ## Getting Started
 
 Follow these steps to get started with the project:
 
-### Installation
+### How to setup
 
-1. Clone the repository:
-
-    ```bash
-    git clone https://github.com/waasnipun/neurafusion.git
-    cd neurafusion
-    ```
-
-2. Install the required dependencies:
+1. Install the required dependencies:
 
     ```bash
     Python 3.9.18
@@ -36,22 +28,10 @@ Follow these steps to get started with the project:
     Timm 0.9.12
     Matplotlib
     Numpy
-    ```
+    Sklearn
+   ```
 
-### Usage
-
-1. **Pre-training:**
-    - Open the relevant pretrain notebook (e.g., `pretrain-ViT.ipynb`).
-    - Run the notebook to pre-train the selected model on the MiniImageNet dataset.
-
-2. **Fine-tuning:**
-    - Open the relevant train notebook (e.g., `train-ViT.ipynb`).
-    - Run the notebook to fine-tune a pre-trained model on a EuroSAT dataset.
-
-3. **Visualization:**
-    - Explore the visualization notebooks (`visualize_EuroSAT.ipynb` and `visualize_miniImageNet.ipynb`) to understand the training and pre-training processes.
-
-### Directory Structure
+2. Copy the MiniImageNet dataset and EuroSat dataset to dataset directory in root. Directory structure should look like this
 
 ```
 ├── datasets 
@@ -70,38 +50,54 @@ Follow these steps to get started with the project:
 │
 ├── images
 │
-├── models - Implementation of different models.
+├── models
 │   ├── ViT.py
 │   ├── efficientnet.py
 │   └── resnet18.py
 │
-├── pretrain-ViT.ipynb - Jupyter notebooks for pre-training Vision Transformer model.
-├── pretrain-efficientnet.ipynb - Jupyter notebooks for pre-training Efficientnet model.
-├── pretrain-resnet18.ipynb - Jupyter notebooks for pre-training Resnet18 model.
+├── pretrain-ViT.ipynb 
+├── pretrain-efficientnet.ipynb 
+├── pretrain-resnet18.ipynb 
 │
-├── pretrained - Pre-trained weights for the models.
-│   ├── efficientnet_model_best_78.64.pth
-│   ├── resnet_model_best_76.89.pth
-│   └── vit_model_best_89.84.pth
+├── pretrained 
+│   ├── efficientnet_model_best.pth
+│   ├── resnet_model_best.pth
+│   └── vit_model_best.pth
 │
 ├── requirement.txt
 ├── tools.py
 │
-├── train-ViT.ipynb - Jupyter notebooks for fine-tuning Vision Transformer model.
-├── train-efficientnet.ipynb - Jupyter notebooks for fine-tuning Efficientnet model.
-├── train-resnet18.ipynb - Jupyter notebooks for fine-tuning Resnet18 model.
+├── train-ViT.ipynb 
+├── train-efficientnet.ipynb 
+├── train-resnet18.ipynb 
 │
-├── trained - Fine-tuned weights after training.
-│   ├── efficientnet_trained_60.13.pth
-│   ├── resnet18_68.75.pth
-│   └── vit_trained_74.0.pth
+├── trained 
+│   ├── efficientnet_trained.pth
+│   ├── resnet18.pth
+│   └── vit_trained.pth
 │
-├── visualize_pretrain.ipynb - Jupyter notebooks for visualizing pre-training dataset.
-└── visualize_train.ipynb - Jupyter notebooks for visualizing fine-tuning dataset.
+├── visualize_pretrain.ipynb 
+└── visualize_train.ipynb 
 ```
+
+### Usage
+
+1. **Pre-training:**
+    - Open the relevant pretrain notebook (e.g., `pretrain-ViT.ipynb`).
+    - Run the notebook to pre-train the selected model on the MiniImageNet dataset.
+
+2. **Fine-tuning:**
+    - Open the relevant train notebook (e.g., `train-ViT.ipynb`).
+    - Run the notebook to fine-tune a pre-trained model on a EuroSAT dataset.
+
+3. **Visualization:**
+    - Explore the visualization notebooks (`visualize_EuroSAT.ipynb` and `visualize_miniImageNet.ipynb`) to understand the training and pre-training processes and distributions.
+
 
 ### Results
 
 ViT results on evaluating against euroSAT dataset
 
 ![Image](/images/vit_euroset.png)
+
+Jupyter notebooks for visualizing fine-tuning dataset.
