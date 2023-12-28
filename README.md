@@ -62,11 +62,11 @@ Follow these steps to get started with the project:
 │   │   .
 │   │   └── n13133613
 │   └── EuroSAT_RGB
-│   │   ├── AnnualCrop
-│   │   .
-│   │   .
-│   │   .
-│   │   └── SeaLake
+│       ├── AnnualCrop
+│       .
+│       .
+│       .
+│       └── SeaLake
 │
 ├── images
 │
